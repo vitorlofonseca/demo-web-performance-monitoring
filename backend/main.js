@@ -1,5 +1,5 @@
 import express from "express";
-import { getPokemonByName } from "./api/pokemon.js";
+import { getPikachuData } from "./api/pokemon.js";
 import { pushFrontendMetric } from "./infrastructure/monitoring.js";
 import promMid from "express-prometheus-middleware";
 import bodyParser from "body-parser";
@@ -35,11 +35,7 @@ app.use(
 
 app.use(bodyParser.json());
 
-app.get("/pikachu", async (req, res) => {
-  const pokemon = await getPokemonByName("pikachu");
-
-  res.send(pokemon);
-});
+app.get("/pikachu", getPikachuData);
 
 app.post("/push-frontend-metric", pushFrontendMetric);
 

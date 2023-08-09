@@ -1,12 +1,22 @@
 import Prometheus from "prom-client";
 import "json-circular-stringify";
 
-const httpRequestDurationMicroseconds = new Prometheus.Histogram({
-  name: "http_request_duration_ms",
-  help: "Duration of HTTP requests in ms",
-  labelNames: ["route"],
-  buckets: [0.1, 5, 15, 50, 100, 200, 300, 400, 500],
-});
+const prometheusMetrics = [];
+
+const getPrometheusMetricByIdentifier = (identifier) => {
+  if (!prometheusMetrics[identifier]) {
+    prometheusMetrics[identifier] = new Prometheus.Histogram({
+      name: `${identifier}_duration_ms`,
+      help: `Duration of request to ${identifier} in ms`,
+      labelNames: ["route"],
+      buckets: [
+        0.1, 5, 15, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000,
+      ],
+    });
+  }
+
+  return prometheusMetrics[identifier];
+};
 
 const fidMetricScore = new Prometheus.Histogram({
   name: "fid_metric_score",
@@ -53,9 +63,9 @@ export const trackRequestTimeMiddleware = (req, res, next) => {
       }ms`
     );
 
-    httpRequestDurationMicroseconds
-      .labels(req.originalUrl)
-      .observe(endTimeRequest - startTimeRequest);
+    getPrometheusMetricByIdentifier(req.originalUrl).observe(
+      endTimeRequest - startTimeRequest
+    );
 
     res.send = oldSend;
     return res.send(data);
