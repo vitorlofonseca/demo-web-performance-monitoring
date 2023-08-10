@@ -15,6 +15,6 @@
     "express": "^4.18.2",
     "express-prometheus-middleware": "^1.2.0",
     "json-circular-stringify": "^1.0.1",
-    "prom-client": "^14.2.0"
+    "prom-client": "^12"
   }
 }
