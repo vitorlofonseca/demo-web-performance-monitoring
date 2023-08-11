@@ -19,6 +19,8 @@ services:
     command: bash -c "npm install && npm run dev"
     ports:
       - "3001:3001"
+    networks:
+      - monitoring-network
   vue-app:
     image: node:20
     container_name: vue-app
@@ -28,3 +30,16 @@ services:
     command: bash -c "npm install && npm run dev --host 0.0.0.0"
     ports:
       - "5175:5175"
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command: "--config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --web.console.templates=/etc/prometheus/consoles --web.console.libraries=/etc/prometheus/console_libraries"
+    networks:
+      - monitoring-network
+networks:
+  monitoring-network:
+    driver: bridge
