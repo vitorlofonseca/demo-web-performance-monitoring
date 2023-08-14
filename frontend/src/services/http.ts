@@ -10,3 +10,7 @@ export const post = async (endpoint: string, body: any) => {
 
   return response
 }
+
+export const get = async (endpoint: string) => {
+  return await fetch(`${import.meta.env.VITE_BACKEND_URL}${endpoint}`)
+}

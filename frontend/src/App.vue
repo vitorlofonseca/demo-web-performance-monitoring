@@ -1,23 +1,28 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import PikachuIntro from './components/PikachuIntro.vue'
+
+import { onMounted, ref } from 'vue'
+import { get } from '@/services/http'
+import PikachuMoves from './components/PikachuMoves.vue'
+
+const pikachu = ref({})
+
+onMounted(async () => {
+  const response = await get('/pikachu')
+  pikachu.value = await response.json()
+})
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+    <img alt="Pikachu pic" class="logo" src="@/assets/pikachu.png" width="225" height="225" />
 
     <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+      <PikachuIntro :pikachu="pikachu" />
     </div>
   </header>
 
-  <RouterView />
+  <PikachuMoves :pikachu="pikachu" />
 </template>
 
 <style scoped>
