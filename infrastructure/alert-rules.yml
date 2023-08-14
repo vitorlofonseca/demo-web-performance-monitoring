@@ -1,0 +1,11 @@
+groups:
+  - name: backend
+    rules:
+      - alert: PikachuDataHighLatency
+        expr: getPikachuData_duration_ms_bucket{le="200"} > 0
+        for: 1s
+        labels:
+          severity: warning
+        annotations:
+          summary: High latency detected for getPikachuData_duration_ms_bucket
+          description: Latency is above 200ms

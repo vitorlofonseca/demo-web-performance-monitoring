@@ -9,6 +9,8 @@ services:
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
+    networks:
+      - monitoring-network
   node-app:
     image: node:20
     container_name: node-app
@@ -30,6 +32,8 @@ services:
     command: bash -c "npm install && npm run dev --host 0.0.0.0"
     ports:
       - "5175:5175"
+    networks:
+      - monitoring-network
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -37,9 +41,24 @@ services:
       - "9090:9090"
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./alert-rules.yml:/etc/prometheus/alert-rules.yml
     command: "--config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --web.console.templates=/etc/prometheus/consoles --web.console.libraries=/etc/prometheus/console_libraries"
     networks:
       - monitoring-network
+  alertmanager:
+    image: prom/alertmanager:v0.25.0
+    container_name: alertmanager
+    depends_on:
+      - prometheus
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    command:
+      - "--config.file=/etc/alertmanager/alertmanager.yml"
+    networks:
+      - monitoring-network
+
 networks:
   monitoring-network:
     driver: bridge

@@ -10,7 +10,8 @@ const getPrometheusMetricByIdentifier = (identifier) => {
       help: `Duration of request to ${identifier} in ms`,
       labelNames: ["route"],
       buckets: [
-        0.1, 5, 15, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000,
+        0, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2000, 3000,
+        4000, 5000, 6000, 7000,
       ],
     });
   }
