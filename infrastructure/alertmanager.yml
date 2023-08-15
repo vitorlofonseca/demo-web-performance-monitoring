@@ -12,5 +12,5 @@ receivers:
   - name: "telegram"
     telegram_configs:
       - api_url: "https://api.telegram.org"
-        chat_id: 630670725
-        bot_token: "6598995205:AAEfIj2rLlQXUk28bHorbZgf_-_srYA6x-E"
+        chat_id: <CHAT_ID>
+        bot_token: "<BOT_TOKEN>"
